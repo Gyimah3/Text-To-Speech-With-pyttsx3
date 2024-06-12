@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: tts-pyttsx3-app
+    name: Text-To-Speech-With-pyttsx3
     env: docker
     dockerfilePath: Dockerfile
     autoDeploy: true
