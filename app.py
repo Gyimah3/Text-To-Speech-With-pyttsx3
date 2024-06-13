@@ -3,6 +3,9 @@ import pyttsx3
 import os
 import logging
 
+# Initialize logging
+logging.basicConfig(level=logging.DEBUG)
+
 # Initialize the pyttsx3 engine
 engine = pyttsx3.init()
 
