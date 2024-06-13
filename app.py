@@ -1,6 +1,7 @@
 import streamlit as st
 import pyttsx3
 import os
+import logging
 
 # Initialize the pyttsx3 engine
 engine = pyttsx3.init()
@@ -45,8 +46,11 @@ if st.button("Speak"):
             engine.save_to_file(text_input, audio_file_path)
             engine.runAndWait()
 
-            # Verify the file is created
+            # Debugging: Check if file exists after runAndWait
+            st.write(f"Checking if {audio_file_path} exists after runAndWait...")
             if os.path.exists(audio_file_path):
+                st.write("File exists!")
+
                 # Read the audio file and play it in the Streamlit app
                 with open(audio_file_path, 'rb') as audio_file:
                     audio_bytes = audio_file.read()
@@ -65,8 +69,10 @@ if st.button("Speak"):
         except Exception as e:
             st.error(f"An error occurred: {e}")
             st.write(f"Exception details: {e}")  # Debug: Log exception details
+            logging.error("Exception occurred", exc_info=True)
     else:
         st.warning("Please enter some text to convert to speech.")
+
 
 
 # import streamlit as st
