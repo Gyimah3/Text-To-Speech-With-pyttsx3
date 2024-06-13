@@ -25,6 +25,9 @@ text_input = st.text_area("Enter text here...")
 
 # Get and display available voices
 voice_list = get_voices()
+st.write("Available voices:")
+for voice in voice_list:
+    st.write(f"ID: {voice[0]}, Name: {voice[1]}")  # Improved display of voices
 voice_options = {voice[1]: voice[0] for voice in voice_list}
 voice_name = st.selectbox("Choose a voice", list(voice_options.keys()))
 selected_voice = voice_options[voice_name]
@@ -38,29 +41,32 @@ if st.button("Speak"):
 
         # Convert text to speech and save to a file
         audio_file_path = 'output.mp3'
-        engine.save_to_file(text_input, audio_file_path)
-        engine.runAndWait()
+        try:
+            engine.save_to_file(text_input, audio_file_path)
+            engine.runAndWait()
 
-        # Verify the file is created
-        if os.path.exists(audio_file_path):
-            # Read the audio file and play it in the Streamlit app
-            with open(audio_file_path, 'rb') as audio_file:
-                audio_bytes = audio_file.read()
-                st.audio(audio_bytes, format='audio/mp3')
+            # Verify the file is created
+            if os.path.exists(audio_file_path):
+                # Read the audio file and play it in the Streamlit app
+                with open(audio_file_path, 'rb') as audio_file:
+                    audio_bytes = audio_file.read()
+                    st.audio(audio_bytes, format='audio/mp3')
 
-            # Provide download link for the audio file
-            with open(audio_file_path, "rb") as f:
-                st.download_button(
-                    label="Download audio",
-                    data=f,
-                    file_name="output.mp3",
-                    mime="audio/mp3"
-                )
-        else:
-            st.error("Audio file was not created. Please try again.")
+                # Provide download link for the audio file
+                with open(audio_file_path, "rb") as f:
+                    st.download_button(
+                        label="Download audio",
+                        data=f,
+                        file_name="output.mp3",
+                        mime="audio/mp3"
+                    )
+            else:
+                st.error("Audio file was not created. Please try again.")
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+            st.write(f"Exception details: {e}")  # Debug: Log exception details
     else:
         st.warning("Please enter some text to convert to speech.")
-
 
 
 # import streamlit as st
